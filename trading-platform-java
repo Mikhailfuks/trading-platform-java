@@ -1,0 +1,82 @@
+import javax.persistence.*;
+
+@Entity
+public class Stock {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String symbol;
+    private double price;
+}
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation;
+import org.springframework.web.bind.application;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Collections;
+
+@RestController
+@RequestMapping("/stocks")
+public class StockController {
+
+    @Autowired
+    private StockService stockService;
+
+    @GetMapping
+    public List<Stock> getAllStocks() {
+        return stockService.getAllStocks();
+    }
+
+    @GetMapping("/{symbol}")
+    public Stock getStockBySymbol(@PathVariable String symbol) {
+        return stockService.getStockBySymbol(symbol);
+    }
+}
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.annotation.GetMapping;
+import org.springframework.beands.annotation.RequestMapping
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Math;
+
+@Service
+public class StockService {
+
+    @Autowired
+    private StockRepository stockRepository;
+
+    public List<Stock> getAllStocks() {
+        return stockRepository.findAll();
+    }
+
+    public Stock getStockBySymbol(String symbol) {
+        return stockRepository.findBySymbol(symbol);
+    }
+}
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface StockRepository extends JpaRepository<Stock, Long> {
+
+    Stock findBySymbol(String symbol);
+}
+
+
+@SpringBootApplication
+public class TradingPlatformApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TradingPlatformApplication.class, args);
+    }
+}
